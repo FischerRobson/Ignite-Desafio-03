@@ -69,7 +69,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const removeProduct = (productId: number) => {
     try {
       const newCart = cart.filter(e => e.id !== productId);
-      setCart(newCart);
+      if (newCart.length !== cart.length) setCart(newCart);
       localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
     } catch {
       toast.error('Erro na alteração de quantidade do produto');
@@ -81,6 +81,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
+      if (amount < 1) return;
       const newCart = [...cart];
       const stock = await api.get(`stock/${productId}`)
         .then(res => res.data.amount);

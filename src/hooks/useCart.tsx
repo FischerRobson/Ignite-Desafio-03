@@ -69,8 +69,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const removeProduct = (productId: number) => {
     try {
       const newCart = cart.filter(e => e.id !== productId);
-      if (newCart.length !== cart.length) setCart(newCart);
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
+      if (newCart.length !== cart.length) {
+        setCart(newCart);
+        localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
+      } else return;
     } catch {
       toast.error('Erro na alteração de quantidade do produto');
     }

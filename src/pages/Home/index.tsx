@@ -35,8 +35,14 @@ const Home = (): JSX.Element => {
     async function loadProducts() {
       await api.get("/products")
         .then(res => {
-          const { data } = res;
-          setProducts(data);
+          const data = res.data as Product[];
+          const formatted = data.map(e => {
+            return {
+              ...e,
+              priceFormatted: formatPrice(e.price)
+            }
+          })
+          setProducts(formatted);
         });
     }
 
@@ -51,13 +57,13 @@ const Home = (): JSX.Element => {
     <ProductList>
       {products.map(product => {
         return (
-          <li>
+          <li key={product.id}>
             <img
               src={product.image}
               alt={product.title}
             />
             <strong>{product.title}</strong>
-            <span>R$ {product.price}</span>
+            <span>{product.priceFormatted}</span>
             <button
               type="button"
               data-testid="add-product-button"
